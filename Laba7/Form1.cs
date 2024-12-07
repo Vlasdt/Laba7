@@ -8,23 +8,25 @@ namespace Laba7
         public Form1()
         {
             InitializeComponent();
-            
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            TArrayContainer container = new TArrayContainer(@"C:\Users\user\source\repos\Laba7\Laba7\Array.txt");
-            richTextBox1.Text = container.ToString();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                    TArrayContainer container = new TArrayContainer(openFileDialog.FileName);
+                    foreach(var a in container.Arrays)
+                {
+                    if(a is TSortedArray<int> || a is TSortedArray<float>)SortedColumn.AppendText( a + "\n");
+                    else UnsortedColumn.AppendText(a + "\n");
+                }
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

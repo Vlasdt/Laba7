@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
 
 namespace Laba7
 {
@@ -43,22 +43,8 @@ namespace Laba7
         {
             return x.CompareTo(y);
         }
-    }
 
-    public class TSortedArray<T> : TArray<T> where T : IComparable<T>
-    {
-        public TSortedArray(T[] array) : base(array)
-        {
-            SortArray();
-        }
-
-        public override void Add(T item)
-        {
-            base.Add(item);
-            SortArray();
-        }
-
-        private void SortArray()
+        public void SortArray()
         {
             for (int i = 0; i < Length - 1; i++)
             {
@@ -73,8 +59,20 @@ namespace Laba7
                 }
             }
         }
+    }
 
+    public class TSortedArray<T> : TArray<T> where T : IComparable<T>
+    {
+        public TSortedArray(T[] array) : base(array)
+        {
+            SortArray();
+        }
 
+        public override void Add(T item)
+        {
+            base.Add(item);
+            SortArray();
+        }
     }
 
     public class TArrayContainer
@@ -116,7 +114,7 @@ namespace Laba7
                 {
                     bool isIntArray = true;
 
-                    for (int i = 1; i < line.Length; i++)
+                    for (int i = 0; i < line.Length; i++)
                     {
                         if (line[i].Contains(","))
                         {
@@ -127,13 +125,16 @@ namespace Laba7
 
                     if (isIntArray)
                     {
-                        int[] intArray = new int[line.Length - 1];
-                        for (int i = 1; i < line.Length; i++)
+                        int[] intArray = new int[line.Length];
+                        for (int i = 0; i < line.Length; i++)
                         {
-                            intArray[i - 1] = int.Parse(line[i]);
+                            intArray[i] = int.Parse(line[i]);
                         }
 
-                        if (line[0] == "sorted")
+                        int[] tmp = (int[])intArray.Clone();
+                        Array.Sort(tmp);
+
+                        if (tmp.SequenceEqual(intArray))
                         {
                             AddSorted(intArray);
                         }
@@ -144,12 +145,16 @@ namespace Laba7
                     }
                     else
                     {
-                        float[] floatArray = new float[line.Length - 1];
-                        for (int i = 1; i < line.Length; i++)
+                        float[] floatArray = new float[line.Length];
+                        for (int i = 0; i < line.Length; i++)
                         {
-                            floatArray[i - 1] = float.Parse(line[i]);
+                            floatArray[i] = float.Parse(line[i]);
                         }
-                        if (line[0] == "sorted")
+
+                        float[] tmp = (float[])floatArray.Clone();
+                        Array.Sort(tmp);
+
+                        if (tmp.SequenceEqual(floatArray))
                         {
                             AddSorted(floatArray);
                         }
@@ -162,7 +167,6 @@ namespace Laba7
             }
         }
 
-
         public override string ToString()
         {
             string result = "";
@@ -172,6 +176,7 @@ namespace Laba7
             }
             return result;
         }
+
         public delegate bool CompareTarray(object a, object b);
         public void DeleteRep(CompareTarray compare)
         {
@@ -185,8 +190,6 @@ namespace Laba7
                     }
                 }
             }
-
         }
     }
-
 }
